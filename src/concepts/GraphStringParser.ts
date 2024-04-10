@@ -5,24 +5,18 @@ import { Graph } from "./Graph";
 /**
  * Creates a rule object from a given nodeMap, old root, new root, and graphString.
  *
- * @param nodeMap
- * @param oldRoot
- * @param newRoot
- * @param graphString
+ * @param oldRoot Label for old root in rule
+ * @param newRoot Label for new root in rule
+ * @param graphString String that represents edges in a graph
  * @returns
  */
 function createRuleFromString(
-  nodeMap: Map<string, GraphNode>,
   oldRoot: string,
   newRoot: string,
   graphString: string
 ) {
-  let leftNode = nodeMap.get(oldRoot)?.deepcopy();
-  let rightNode = nodeMap.get(newRoot)?.deepcopy();
-
-  if (leftNode === undefined || rightNode === undefined) {
-    throw new Error("Insufficient nodeMap");
-  }
+  let leftNode = new GraphNode(oldRoot);
+  let rightNode = new GraphNode(newRoot);
 
   graphString = graphString.trim().slice(1, -1);
   const allNodeStrings = graphString
@@ -37,12 +31,8 @@ function createRuleFromString(
       continue;
     }
 
-    const parsedNode = nodeString.split("_");
-    const nodeInstance = nodeMap.get(parsedNode[0])?.deepcopy();
-
-    if (nodeInstance === undefined) {
-      throw new TypeError("Node in graph not included in nodeMap");
-    }
+    const parsedNode = nodeString.split("_")[0];
+    const nodeInstance = new GraphNode(parsedNode);
     nodeInstances.set(nodeString, nodeInstance);
   }
 
@@ -78,12 +68,6 @@ function createRuleFromString(
 const testString = "[(d_1, b_1), (b_1, c_1), (c_1, b_2), ()]";
 const oldRoot = "a";
 const newRoot = "b";
-let testNodeMap: Map<string, GraphNode> = new Map<string, GraphNode>([
-  ["a", new GraphNode("a")],
-  ["b", new GraphNode("b")],
-  ["c", new GraphNode("c")],
-  ["d", new GraphNode("d")],
-]);
-console.log(createRuleFromString(testNodeMap, oldRoot, newRoot, testString));
+console.log(createRuleFromString(oldRoot, newRoot, testString));
 
 export {};
