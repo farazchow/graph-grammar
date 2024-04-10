@@ -30,7 +30,7 @@ export class Graph {
     });
   }
 
-  public replace_vertex(
+  public replaceVertex(
     old: GraphNode,
     newRoot: GraphNode,
     graph: Graph

@@ -35,7 +35,7 @@ describe('test graph deepcopy', () => {
       mini.set(c, new Set([d]));
       mini.set(d, new Set([c]));
       const subGraph = new Graph(mini);
-      const newGraph = graph.replace_vertex(b, c, subGraph);
+      const newGraph = graph.replaceVertex(b, c, subGraph);
 
       const adj2 = new Map();
       const a2 = new GraphNode("a");
