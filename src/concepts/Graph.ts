@@ -1,36 +1,59 @@
 import { GraphNode } from "./GraphNode";
 
+const _ = require('lodash');
+
 export class Graph {
-  constructor(private adjList: Map<GraphNode, Array<GraphNode>>) {}
+  constructor(private adjList: Map<GraphNode, Set<GraphNode>>) {}
 
   public deepcopy(): Graph {
-    const newList: Map<GraphNode, Array<GraphNode>> = new Map();
+    const newList: Map<GraphNode, Set<GraphNode>> = new Map();
     this.adjList.forEach(
       (
-        neighbors: Array<GraphNode>,
+        neighbors: Set<GraphNode>,
         vtx: GraphNode,
-        map: Map<GraphNode, Array<GraphNode>>
+        map: Map<GraphNode, Set<GraphNode>>
       ) => {
-        const neighborsList: Array<GraphNode> = [];
-        for (const node of neighbors) {
-          neighborsList.push(node.deepcopy());
-        }
+        const neighborsList: Set<GraphNode> = new Set();
+        neighbors.forEach((node: GraphNode) => {
+            neighborsList.add(node.deepcopy());
+        })
         newList.set(vtx.deepcopy(), neighborsList);
       }
     );
     return new Graph(newList);
   }
 
-  private getAdjList(): Map<GraphNode, Array<GraphNode>> {
+  public getAdjList(): Map<GraphNode, Set<GraphNode>> {
     return this.adjList;
   }
+
+
+
+  public isEqual(other: Graph): boolean {
+    return _.isEqual(this.adjList, other.adjList);
+  }
+
+//   public isEqual(other: Graph): boolean {
+//     let allEq = this.adjList.size === other.adjList.size;
+//     if (allEq === false) {
+//         return false;
+//     }
+
+//     this.adjList.forEach((neighbors: Set<GraphNode>, vtx: GraphNode) => {
+//         for (const neighbor of neighbors) {
+//             if (neighbor.isEqual()) {
+
+//             }
+//         }
+//     })
+//   }
 
   public replace_vertex(
     old: GraphNode,
     newRoot: GraphNode,
     graph: Graph
   ): Graph {
-    const newAdjList: Map<GraphNode, Array<GraphNode>> = new Map();
+    const newAdjList: Map<GraphNode, Set<GraphNode>> = new Map();
 
     // TODO: replace node
     const oldNeighbors = this.adjList.get(old);
@@ -42,12 +65,20 @@ export class Graph {
     // Add all original nodes except for the one to replace
     this.adjList.forEach(
       (
-        neighbors: GraphNode[],
+        neighbors: Set<GraphNode>,
         vtx: GraphNode,
-        map: Map<GraphNode, Array<GraphNode>>
+        map: Map<GraphNode, Set<GraphNode>>
       ) => {
         if (vtx !== old) {
-          newAdjList.set(vtx, neighbors);
+          const newNeighbors: Set<GraphNode> = new Set();
+          neighbors.forEach((node: GraphNode) => {
+            if (node !== old) {
+                newNeighbors.add(node);
+            } else {
+                newNeighbors.add(newRoot);
+            }
+          })
+          newAdjList.set(vtx, newNeighbors);
         }
       }
     );
@@ -57,14 +88,22 @@ export class Graph {
       .getAdjList()
       .forEach(
         (
-          neighbors: GraphNode[],
+          neighbors: Set<GraphNode>,
           vtx: GraphNode,
-          map: Map<GraphNode, Array<GraphNode>>
+          map: Map<GraphNode, Set<GraphNode>>
         ) => {
           if (vtx === newRoot) {
             // Add all non-root nodes to root neighbors
-            const newNeighbors: Array<GraphNode> =
-              oldNeighbors.concat(neighbors);
+            const newNeighbors: Set<GraphNode> = new Set();
+
+            oldNeighbors.forEach((node: GraphNode) => {
+                newNeighbors.add(node);
+            })
+
+            neighbors.forEach((node: GraphNode) => {
+                newNeighbors.add(node);
+            })
+
             newAdjList.set(vtx, newNeighbors);
           } else {
             newAdjList.set(vtx, neighbors);

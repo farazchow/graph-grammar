@@ -14,6 +14,10 @@ export class GraphNode {
     return GraphNode.types.get(this._type);
   }
 
+  public isEqual(other: GraphNode): boolean {
+    return this.label === other.label;
+  }
+
   public deepcopy() {
     return new GraphNode(this._type);
   }
