@@ -73,12 +73,12 @@ export class Graph {
           const newNeighbors: Set<GraphNode> = new Set();
           neighbors.forEach((node: GraphNode) => {
             if (node !== old) {
-                newNeighbors.add(node);
+                newNeighbors.add(node.deepcopy());
             } else {
-                newNeighbors.add(newRoot);
+                newNeighbors.add(newRoot.deepcopy());
             }
           })
-          newAdjList.set(vtx, newNeighbors);
+          newAdjList.set(vtx.deepcopy(), newNeighbors);
         }
       }
     );
@@ -97,16 +97,16 @@ export class Graph {
             const newNeighbors: Set<GraphNode> = new Set();
 
             oldNeighbors.forEach((node: GraphNode) => {
-                newNeighbors.add(node);
+                newNeighbors.add(node.deepcopy());
             })
 
             neighbors.forEach((node: GraphNode) => {
-                newNeighbors.add(node);
+                newNeighbors.add(node.deepcopy());
             })
 
-            newAdjList.set(vtx, newNeighbors);
+            newAdjList.set(vtx.deepcopy(), newNeighbors);
           } else {
-            newAdjList.set(vtx, neighbors);
+            newAdjList.set(vtx.deepcopy(), neighbors);
           }
         }
       );
