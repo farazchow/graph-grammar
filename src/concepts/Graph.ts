@@ -23,14 +23,11 @@ export class Graph {
     return new Graph(newList);
   }
 
-  public getAdjList(): Map<GraphNode, Set<GraphNode>> {
-    return this.adjList;
-  }
-
-
 
   public isEqual(other: Graph): boolean {
-    return _.isEqual(this.adjList, other.adjList);
+    return _.isEqualWith(this.adjList, other.adjList, (value1: any, value2: any, key: string) => {
+        return key === "_id" ? true : undefined;
+    });
   }
 
 //   public isEqual(other: Graph): boolean {
@@ -73,19 +70,19 @@ export class Graph {
           const newNeighbors: Set<GraphNode> = new Set();
           neighbors.forEach((node: GraphNode) => {
             if (node !== old) {
-                newNeighbors.add(node);
+                newNeighbors.add(node.deepcopy());
             } else {
-                newNeighbors.add(newRoot);
+                newNeighbors.add(newRoot.deepcopy());
             }
           })
-          newAdjList.set(vtx, newNeighbors);
+          newAdjList.set(vtx.deepcopy(), newNeighbors);
         }
       }
     );
 
     // Add all new nodes to adjacency list
     graph
-      .getAdjList()
+      .adjList
       .forEach(
         (
           neighbors: Set<GraphNode>,
@@ -97,16 +94,16 @@ export class Graph {
             const newNeighbors: Set<GraphNode> = new Set();
 
             oldNeighbors.forEach((node: GraphNode) => {
-                newNeighbors.add(node);
+                newNeighbors.add(node.deepcopy());
             })
 
             neighbors.forEach((node: GraphNode) => {
-                newNeighbors.add(node);
+                newNeighbors.add(node.deepcopy());
             })
 
-            newAdjList.set(vtx, newNeighbors);
+            newAdjList.set(vtx.deepcopy(), newNeighbors);
           } else {
-            newAdjList.set(vtx, neighbors);
+            newAdjList.set(vtx.deepcopy(), neighbors);
           }
         }
       );
