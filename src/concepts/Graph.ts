@@ -30,21 +30,6 @@ export class Graph {
     });
   }
 
-//   public isEqual(other: Graph): boolean {
-//     let allEq = this.adjList.size === other.adjList.size;
-//     if (allEq === false) {
-//         return false;
-//     }
-
-//     this.adjList.forEach((neighbors: Set<GraphNode>, vtx: GraphNode) => {
-//         for (const neighbor of neighbors) {
-//             if (neighbor.isEqual()) {
-
-//             }
-//         }
-//     })
-//   }
-
   public replace_vertex(
     old: GraphNode,
     newRoot: GraphNode,

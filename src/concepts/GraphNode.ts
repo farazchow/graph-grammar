@@ -10,11 +10,11 @@ export class GraphNode {
     this._id = uuidv4();
   }
 
-  public get label() {
+  public get label(): string {
     return this._type;
   }
 
-  public get image() {
+  public get image(): ImageBitmap | undefined {
     return GraphNode.types.get(this._type);
   }
 
@@ -22,7 +22,7 @@ export class GraphNode {
     return this.label === other.label;
   }
 
-  public deepcopy() {
+  public deepcopy(): GraphNode {
     const n = new GraphNode(this._type);
     n._id = this._id;
     return n;
