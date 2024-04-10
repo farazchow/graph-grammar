@@ -2,15 +2,27 @@ import { Rule } from "./Rule";
 import { GraphNode } from "./GraphNode";
 import { Graph } from "./Graph";
 
+/**
+ * Creates a rule object from a given nodeMap, old root, new root, and graphString.
+ *
+ * @param nodeMap
+ * @param oldRoot
+ * @param newRoot
+ * @param graphString
+ * @returns
+ */
 function createRuleFromString(
   nodeMap: Map<string, GraphNode>,
   oldRoot: string,
   newRoot: string,
-  probability: number,
   graphString: string
 ) {
   let leftNode = nodeMap.get(oldRoot)?.deepcopy();
   let rightNode = nodeMap.get(newRoot)?.deepcopy();
+
+  if (leftNode === undefined || rightNode === undefined) {
+    throw new Error("Insufficient nodeMap");
+  }
 
   graphString = graphString.trim().slice(1, -1);
   const allNodeStrings = graphString
@@ -19,6 +31,7 @@ function createRuleFromString(
 
   // Create instances for all unique nodes
   const nodeInstances: Map<String, GraphNode> = new Map<String, GraphNode>();
+  nodeInstances.set(`${newRoot}_1`, rightNode);
   for (let nodeString of allNodeStrings) {
     if (nodeInstances.has(nodeString)) {
       continue;
@@ -58,22 +71,19 @@ function createRuleFromString(
   console.log(adjacencyMatrix);
 
   const graph = new Graph(adjacencyMatrix);
-
-  // return [oldRoot, newRoot, probability];
+  const rule = new Rule(leftNode, rightNode, graph);
+  return rule;
 }
 
-const testString = "[(d_1, b_1), (b_1, c_1)]";
+const testString = "[(d_1, b_1), (b_1, c_1), (c_1, b_2), ()]";
 const oldRoot = "a";
 const newRoot = "b";
-const probability = 0.36;
 let testNodeMap: Map<string, GraphNode> = new Map<string, GraphNode>([
   ["a", new GraphNode("a")],
   ["b", new GraphNode("b")],
   ["c", new GraphNode("c")],
   ["d", new GraphNode("d")],
 ]);
-console.log(
-  createRuleFromString(testNodeMap, oldRoot, newRoot, probability, testString)
-);
+console.log(createRuleFromString(testNodeMap, oldRoot, newRoot, testString));
 
 export {};
