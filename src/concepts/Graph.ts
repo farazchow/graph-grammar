@@ -23,14 +23,11 @@ export class Graph {
     return new Graph(newList);
   }
 
-  public getAdjList(): Map<GraphNode, Set<GraphNode>> {
-    return this.adjList;
-  }
-
-
 
   public isEqual(other: Graph): boolean {
-    return _.isEqual(this.adjList, other.adjList);
+    return _.isEqualWith(this.adjList, other.adjList, (value1: any, value2: any, key: string) => {
+        return key === "_id" ? true : undefined;
+    });
   }
 
 //   public isEqual(other: Graph): boolean {
@@ -85,7 +82,7 @@ export class Graph {
 
     // Add all new nodes to adjacency list
     graph
-      .getAdjList()
+      .adjList
       .forEach(
         (
           neighbors: Set<GraphNode>,

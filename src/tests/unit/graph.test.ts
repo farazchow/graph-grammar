@@ -11,10 +11,8 @@ describe('test graph deepcopy', () => {
       adjList.set(a, new Set([a]));
       adjList.set(b, new Set([b]));
       const graph = new Graph(adjList);
-      console.log(graph);
 
       const deep = graph.deepcopy();
-      console.log(deep);
       expect(_.isEqual(graph, deep)).toBe(true);
     });
   });
@@ -37,7 +35,6 @@ describe('test graph deepcopy', () => {
       mini.set(c, new Set([d]));
       mini.set(d, new Set([c]));
       const subGraph = new Graph(mini);
-
       const newGraph = graph.replace_vertex(b, c, subGraph);
 
       const adj2 = new Map();
