@@ -10,7 +10,7 @@ import { Graph } from "./Graph";
  * @param graphString String that represents edges in a graph
  * @returns
  */
-function createRuleFromString(
+export function createRuleFromString(
   oldRoot: string,
   newRoot: string,
   graphString: string
@@ -63,10 +63,3 @@ function createRuleFromString(
   const rule = new Rule(oldRoot, rightNode, graph);
   return rule;
 }
-
-const testString = "[(d_1, b_1), (b_1, c_1), (c_1, b_2), ()]";
-const oldRoot = "a";
-const newRoot = "b";
-console.log(createRuleFromString(oldRoot, newRoot, testString));
-
-export {};
