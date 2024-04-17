@@ -5,9 +5,33 @@ const _ = require("lodash");
 export class Graph {
   constructor(private adjList: Map<GraphNode, Set<GraphNode>>) {}
 
-  public copy(
-    root: GraphNode | undefined = undefined
-  ): [Graph, GraphNode | undefined] {
+  public copy(): Graph {
+    const copyMap: Map<GraphNode, GraphNode> = new Map();
+
+    this.adjList.forEach((_, vtx: GraphNode) => {
+      copyMap.set(vtx, vtx.copy());
+    });
+
+    const newList: Map<GraphNode, Set<GraphNode>> = new Map();
+    this.adjList.forEach((neighbors: Set<GraphNode>, vtx: GraphNode) => {
+      const neighborsList: Set<GraphNode> = new Set();
+      neighbors.forEach((node: GraphNode) => {
+        const cpy = copyMap.get(node);
+        if (cpy === undefined) {
+          throw new ReferenceError("Node copy not found!");
+        }
+        neighborsList.add(cpy);
+      });
+      const v = copyMap.get(vtx);
+      if (v === undefined) {
+        throw new ReferenceError("Node copy not found!");
+      }
+      newList.set(v, neighborsList);
+    });
+    return new Graph(newList);
+  }
+
+  public copyWithRoot(root: GraphNode): [Graph, GraphNode] {
     const copyMap: Map<GraphNode, GraphNode> = new Map();
     let newRoot: GraphNode | undefined = undefined;
 
@@ -35,6 +59,9 @@ export class Graph {
         newRoot = v;
       }
     });
+    if (newRoot === undefined) {
+      throw new Error("New root should be defined!")
+    }
     return [new Graph(newList), newRoot];
   }
 
@@ -60,7 +87,7 @@ export class Graph {
     return filteredVtxs;
   }
 
-  public replaceVertex(
+  private replaceVtx(
     old: GraphNode,
     newRoot: GraphNode,
     graph: Graph
@@ -124,20 +151,30 @@ export class Graph {
     return new Graph(newAdjList);
   }
 
+  public replaceVertex(old: GraphNode, newRoot: GraphNode, subgraph: Graph): Graph {
+    const [g, v] = this.copyWithRoot(old);
+    const [sg, rt] = subgraph.copyWithRoot(newRoot);
+    if (rt === undefined || v === undefined) {
+      throw new Error("new root should not be undefined!");
+    }
+    return g.replaceVtx(v, rt, sg);
+  }
+
+
   public replaceVerticesWithLabel(
     label: string,
     root: GraphNode,
     subgraph: Graph
   ) {
-    let [newGraph, _] = this.copy();
+    let newGraph = this.copy();
     const vtxs = newGraph.findAllVerticesWithLabel(label);
 
     for (const vtx of vtxs) {
-      const [sg, rt] = subgraph.copy(root);
+      const [sg, rt] = subgraph.copyWithRoot(root);
       if (rt === undefined) {
         throw new Error("new root should not be undefined!");
       }
-      newGraph = newGraph.replaceVertex(vtx, rt, sg);
+      newGraph = newGraph.replaceVtx(vtx, rt, sg);
     }
     return newGraph;
   }

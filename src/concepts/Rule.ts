@@ -9,7 +9,11 @@ export class Rule {
   ) {}
 
   public applyOne(node: GraphNode, graph: Graph): Graph {
-    throw new Error("Not implemented!");
+    if (node.label !== this.left) {
+      throw new Error("Node to replace is not of correct type!")
+    }
+    const newGraph = graph.replaceVertex(node, this.root, this.right);
+    return newGraph;
   }
 
   public applyAll(graph: Graph): Graph {

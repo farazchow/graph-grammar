@@ -13,7 +13,7 @@ describe('test graph deepcopy', () => {
       adjList.set(b, new Set([b]));
       const graph = new Graph(adjList);
 
-      const deep = graph.copy()[0];
+      const deep = graph.copy();
       expect(graph.isEqual(deep)).toBe(true);
     });
   });
