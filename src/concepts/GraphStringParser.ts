@@ -15,7 +15,6 @@ function createRuleFromString(
   newRoot: string,
   graphString: string
 ) {
-  let leftNode = new GraphNode(oldRoot);
   let rightNode = new GraphNode(newRoot);
 
   graphString = graphString.trim().slice(1, -1);
@@ -61,7 +60,7 @@ function createRuleFromString(
   console.log(adjacencyMatrix);
 
   const graph = new Graph(adjacencyMatrix);
-  const rule = new Rule(leftNode, rightNode, graph);
+  const rule = new Rule(oldRoot, rightNode, graph);
   return rule;
 }
 
