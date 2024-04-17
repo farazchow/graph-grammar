@@ -2,15 +2,21 @@ import { Rule } from "./Rule";
 import { GraphNode } from "./GraphNode";
 import { Graph } from "./Graph";
 
+/**
+ * Creates a rule object from a given nodeMap, old root, new root, and graphString.
+ *
+ * @param oldRoot Label for old root in rule
+ * @param newRoot Label for new root in rule
+ * @param graphString String that represents edges in a graph
+ * @returns
+ */
 function createRuleFromString(
-  nodeMap: Map<string, GraphNode>,
   oldRoot: string,
   newRoot: string,
-  probability: number,
   graphString: string
 ) {
-  let leftNode = nodeMap.get(oldRoot)?.deepcopy();
-  let rightNode = nodeMap.get(newRoot)?.deepcopy();
+  let leftNode = new GraphNode(oldRoot);
+  let rightNode = new GraphNode(newRoot);
 
   graphString = graphString.trim().slice(1, -1);
   const allNodeStrings = graphString
@@ -19,17 +25,14 @@ function createRuleFromString(
 
   // Create instances for all unique nodes
   const nodeInstances: Map<String, GraphNode> = new Map<String, GraphNode>();
+  nodeInstances.set(`${newRoot}_1`, rightNode);
   for (let nodeString of allNodeStrings) {
     if (nodeInstances.has(nodeString)) {
       continue;
     }
 
-    const parsedNode = nodeString.split("_");
-    const nodeInstance = nodeMap.get(parsedNode[0])?.deepcopy();
-
-    if (nodeInstance === undefined) {
-      throw new TypeError("Node in graph not included in nodeMap");
-    }
+    const parsedNode = nodeString.split("_")[0];
+    const nodeInstance = new GraphNode(parsedNode);
     nodeInstances.set(nodeString, nodeInstance);
   }
 
@@ -58,22 +61,13 @@ function createRuleFromString(
   console.log(adjacencyMatrix);
 
   const graph = new Graph(adjacencyMatrix);
-
-  // return [oldRoot, newRoot, probability];
+  const rule = new Rule(leftNode, rightNode, graph);
+  return rule;
 }
 
-const testString = "[(d_1, b_1), (b_1, c_1)]";
+const testString = "[(d_1, b_1), (b_1, c_1), (c_1, b_2), ()]";
 const oldRoot = "a";
 const newRoot = "b";
-const probability = 0.36;
-let testNodeMap: Map<string, GraphNode> = new Map<string, GraphNode>([
-  ["a", new GraphNode("a")],
-  ["b", new GraphNode("b")],
-  ["c", new GraphNode("c")],
-  ["d", new GraphNode("d")],
-]);
-console.log(
-  createRuleFromString(testNodeMap, oldRoot, newRoot, probability, testString)
-);
+console.log(createRuleFromString(oldRoot, newRoot, testString));
 
 export {};
