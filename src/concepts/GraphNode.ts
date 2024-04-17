@@ -22,9 +22,8 @@ export class GraphNode {
     return this.label === other.label;
   }
 
-  public deepcopy(): GraphNode {
+  public copy(): GraphNode {
     const n = new GraphNode(this._type);
-    n._id = this._id;
     return n;
   }
 }

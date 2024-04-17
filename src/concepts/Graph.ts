@@ -5,29 +5,59 @@ const _ = require('lodash');
 export class Graph {
   constructor(private adjList: Map<GraphNode, Set<GraphNode>>) {}
 
-  public deepcopy(): Graph {
+  public copy(root: GraphNode | undefined = undefined): [Graph, GraphNode | undefined] {
+
+    const copyMap: Map<GraphNode, GraphNode> = new Map();
+    let newRoot: GraphNode | undefined = undefined;
+
+    this.adjList.forEach((_, vtx: GraphNode) => {
+      copyMap.set(vtx, vtx.copy());
+    })
+
     const newList: Map<GraphNode, Set<GraphNode>> = new Map();
     this.adjList.forEach(
       (
         neighbors: Set<GraphNode>,
         vtx: GraphNode,
-        map: Map<GraphNode, Set<GraphNode>>
       ) => {
         const neighborsList: Set<GraphNode> = new Set();
         neighbors.forEach((node: GraphNode) => {
-            neighborsList.add(node.deepcopy());
+            const cpy = copyMap.get(node);
+            if (cpy === undefined) {
+              throw new ReferenceError("Node copy not found!")
+            }
+            neighborsList.add(cpy);
         })
-        newList.set(vtx.deepcopy(), neighborsList);
+        const v = copyMap.get(vtx);
+        if (v === undefined) {
+          throw new ReferenceError("Node copy not found!")
+        }
+        newList.set(v, neighborsList);
+
+        if (vtx === root) {
+          newRoot = v;
+        }
       }
     );
-    return new Graph(newList);
+    return [new Graph(newList), newRoot];
   }
-
 
   public isEqual(other: Graph): boolean {
     return _.isEqualWith(this.adjList, other.adjList, (value1: any, value2: any, key: string) => {
         return key === "_id" ? true : undefined;
     });
+  }
+
+  private findAllVerticesWithLabel(label: string): Array<GraphNode> {
+    const filteredVtxs: Array<GraphNode> = [];
+
+    this.adjList.forEach((_, vtx: GraphNode) => {
+      if (vtx.label === label) {
+        filteredVtxs.push(vtx);
+      }
+    })
+
+    return filteredVtxs;
   }
 
   public replaceVertex(
@@ -55,12 +85,12 @@ export class Graph {
           const newNeighbors: Set<GraphNode> = new Set();
           neighbors.forEach((node: GraphNode) => {
             if (node !== old) {
-                newNeighbors.add(node.deepcopy());
+                newNeighbors.add(node);
             } else {
-                newNeighbors.add(newRoot.deepcopy());
+                newNeighbors.add(newRoot);
             }
           })
-          newAdjList.set(vtx.deepcopy(), newNeighbors);
+          newAdjList.set(vtx, newNeighbors);
         }
       }
     );
@@ -79,20 +109,34 @@ export class Graph {
             const newNeighbors: Set<GraphNode> = new Set();
 
             oldNeighbors.forEach((node: GraphNode) => {
-                newNeighbors.add(node.deepcopy());
+                newNeighbors.add(node);
             })
 
             neighbors.forEach((node: GraphNode) => {
-                newNeighbors.add(node.deepcopy());
+                newNeighbors.add(node);
             })
 
-            newAdjList.set(vtx.deepcopy(), newNeighbors);
+            newAdjList.set(vtx, newNeighbors);
           } else {
-            newAdjList.set(vtx.deepcopy(), neighbors);
+            newAdjList.set(vtx, neighbors);
           }
         }
       );
 
     return new Graph(newAdjList);
+  }
+
+  public replaceVerticesWithLabel(label: string, root: GraphNode, subgraph: Graph) {
+    let [newGraph, _] = this.copy();
+    const vtxs = newGraph.findAllVerticesWithLabel(label);
+
+    for (const vtx of vtxs) {
+      const [sg, rt] = subgraph.copy(root);
+      if (rt === undefined) {
+        throw new Error("new root should not be undefined!");
+      }
+      newGraph = newGraph.replaceVertex(vtx, rt, sg);
+    }
+    return newGraph;
   }
 }
