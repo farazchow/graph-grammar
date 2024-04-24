@@ -3,35 +3,10 @@ import { GraphNode } from "./GraphNode";
 const _ = require("lodash");
 
 export class Graph {
-  constructor(private adjList: Map<GraphNode, Set<GraphNode>>) {}
 
-  public copy(): Graph {
-    const copyMap: Map<GraphNode, GraphNode> = new Map();
+  constructor(private adjList: Map<GraphNode, Array<GraphNode>>) {}
 
-    this.adjList.forEach((_, vtx: GraphNode) => {
-      copyMap.set(vtx, vtx.copy());
-    });
-
-    const newList: Map<GraphNode, Set<GraphNode>> = new Map();
-    this.adjList.forEach((neighbors: Set<GraphNode>, vtx: GraphNode) => {
-      const neighborsList: Set<GraphNode> = new Set();
-      neighbors.forEach((node: GraphNode) => {
-        const cpy = copyMap.get(node);
-        if (cpy === undefined) {
-          throw new ReferenceError("Node copy not found!");
-        }
-        neighborsList.add(cpy);
-      });
-      const v = copyMap.get(vtx);
-      if (v === undefined) {
-        throw new ReferenceError("Node copy not found!");
-      }
-      newList.set(v, neighborsList);
-    });
-    return new Graph(newList);
-  }
-
-  public copyWithRoot(root: GraphNode): [Graph, GraphNode] {
+  private cpy(root: GraphNode | undefined = undefined): Graph | [Graph, GraphNode] {
     const copyMap: Map<GraphNode, GraphNode> = new Map();
     let newRoot: GraphNode | undefined = undefined;
 
@@ -39,36 +14,63 @@ export class Graph {
       copyMap.set(vtx, vtx.copy());
     });
 
-    const newList: Map<GraphNode, Set<GraphNode>> = new Map();
-    this.adjList.forEach((neighbors: Set<GraphNode>, vtx: GraphNode) => {
-      const neighborsList: Set<GraphNode> = new Set();
-      neighbors.forEach((node: GraphNode) => {
+    const newList: Map<GraphNode, GraphNode[]> = new Map();
+    this.adjList.forEach((neighbors: GraphNode[], vtx: GraphNode) => {
+      const neighborsList: GraphNode[] = [];
+
+      // Add copy to neighbors
+      for (const node of neighbors) {
         const cpy = copyMap.get(node);
         if (cpy === undefined) {
           throw new ReferenceError("Node copy not found!");
         }
-        neighborsList.add(cpy);
-      });
+        neighborsList.push(cpy);
+      }
+
       const v = copyMap.get(vtx);
       if (v === undefined) {
         throw new ReferenceError("Node copy not found!");
       }
       newList.set(v, neighborsList);
 
-      if (vtx === root) {
+      if (root !== undefined && vtx === root) {
         newRoot = v;
       }
     });
-    if (newRoot === undefined) {
-      throw new Error("New root should be defined!")
+    if (root !== undefined) {
+      if (newRoot === undefined) {
+        throw new Error("New root should be defined!")
+      }
+      return [new Graph(newList), newRoot];
+    } else {
+      return new Graph(newList);
     }
-    return [new Graph(newList), newRoot];
+  }
+
+  public copy(): Graph {
+    return this.cpy() as Graph;
+  }
+
+  public copyWithRoot(root: GraphNode): [Graph, GraphNode] {
+    return this.cpy(root) as [Graph, GraphNode];
   }
 
   public isEqual(other: Graph): boolean {
+
+    const m1: Map<GraphNode, Set<GraphNode>> = new Map();
+    const m2: Map<GraphNode, Set<GraphNode>> = new Map();
+
+    this.adjList.forEach((neighbors: GraphNode[], vtx: GraphNode) => {
+      m1.set(vtx, new Set(neighbors));
+    })
+
+    other.adjList.forEach((neighbors: GraphNode[], vtx: GraphNode) => {
+      m2.set(vtx, new Set(neighbors));
+    })
+
     return _.isEqualWith(
-      this.adjList,
-      other.adjList,
+      m1,
+      m2,
       (value1: any, value2: any, key: string) => {
         return key === "_id" ? true : undefined;
       }
@@ -92,7 +94,7 @@ export class Graph {
     newRoot: GraphNode,
     graph: Graph
   ): Graph {
-    const newAdjList: Map<GraphNode, Set<GraphNode>> = new Map();
+    const newAdjList: Map<GraphNode, GraphNode[]> = new Map();
 
     // TODO: replace node
     const oldNeighbors = this.adjList.get(old);
@@ -104,17 +106,17 @@ export class Graph {
     // Add all original nodes except for the one to replace
     this.adjList.forEach(
       (
-        neighbors: Set<GraphNode>,
+        neighbors: GraphNode[],
         vtx: GraphNode,
-        map: Map<GraphNode, Set<GraphNode>>
+        map: Map<GraphNode, GraphNode[]>
       ) => {
         if (vtx !== old) {
-          const newNeighbors: Set<GraphNode> = new Set();
+          const newNeighbors: GraphNode[] = [];
           neighbors.forEach((node: GraphNode) => {
             if (node !== old) {
-              newNeighbors.add(node);
+              newNeighbors.push(node);
             } else {
-              newNeighbors.add(newRoot);
+              newNeighbors.push(newRoot);
             }
           });
           newAdjList.set(vtx, newNeighbors);
@@ -125,20 +127,20 @@ export class Graph {
     // Add all new nodes to adjacency list
     graph.adjList.forEach(
       (
-        neighbors: Set<GraphNode>,
+        neighbors: GraphNode[],
         vtx: GraphNode,
-        map: Map<GraphNode, Set<GraphNode>>
+        map: Map<GraphNode, GraphNode[]>
       ) => {
         if (vtx === newRoot) {
           // Add all non-root nodes to root neighbors
-          const newNeighbors: Set<GraphNode> = new Set();
+          const newNeighbors: GraphNode[] = [];
 
           oldNeighbors.forEach((node: GraphNode) => {
-            newNeighbors.add(node);
+            newNeighbors.push(node);
           });
 
           neighbors.forEach((node: GraphNode) => {
-            newNeighbors.add(node);
+            newNeighbors.push(node);
           });
 
           newAdjList.set(vtx, newNeighbors);
