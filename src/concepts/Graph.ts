@@ -3,10 +3,11 @@ import { GraphNode } from "./GraphNode";
 const _ = require("lodash");
 
 export class Graph {
-
   constructor(private adjList: Map<GraphNode, Array<GraphNode>>) {}
 
-  private cpy(root: GraphNode | undefined = undefined): Graph | [Graph, GraphNode] {
+  private cpy(
+    root: GraphNode | undefined = undefined
+  ): Graph | [Graph, GraphNode] {
     const copyMap: Map<GraphNode, GraphNode> = new Map();
     let newRoot: GraphNode | undefined = undefined;
 
@@ -39,7 +40,7 @@ export class Graph {
     });
     if (root !== undefined) {
       if (newRoot === undefined) {
-        throw new Error("New root should be defined!")
+        throw new Error("New root should be defined!");
       }
       return [new Graph(newList), newRoot];
     } else {
@@ -56,25 +57,20 @@ export class Graph {
   }
 
   public isEqual(other: Graph): boolean {
-
     const m1: Map<GraphNode, Set<GraphNode>> = new Map();
     const m2: Map<GraphNode, Set<GraphNode>> = new Map();
 
     this.adjList.forEach((neighbors: GraphNode[], vtx: GraphNode) => {
       m1.set(vtx, new Set(neighbors));
-    })
+    });
 
     other.adjList.forEach((neighbors: GraphNode[], vtx: GraphNode) => {
       m2.set(vtx, new Set(neighbors));
-    })
+    });
 
-    return _.isEqualWith(
-      m1,
-      m2,
-      (value1: any, value2: any, key: string) => {
-        return key === "_id" ? true : undefined;
-      }
-    );
+    return _.isEqualWith(m1, m2, (value1: any, value2: any, key: string) => {
+      return key === "_id" ? true : undefined;
+    });
   }
 
   private findAllVerticesWithLabel(label: string): Array<GraphNode> {
@@ -89,11 +85,7 @@ export class Graph {
     return filteredVtxs;
   }
 
-  private replaceVtx(
-    old: GraphNode,
-    newRoot: GraphNode,
-    graph: Graph
-  ): Graph {
+  private replaceVtx(old: GraphNode, newRoot: GraphNode, graph: Graph): Graph {
     const newAdjList: Map<GraphNode, GraphNode[]> = new Map();
 
     // TODO: replace node
@@ -153,7 +145,11 @@ export class Graph {
     return new Graph(newAdjList);
   }
 
-  public replaceVertex(old: GraphNode, newRoot: GraphNode, subgraph: Graph): Graph {
+  public replaceVertex(
+    old: GraphNode,
+    newRoot: GraphNode,
+    subgraph: Graph
+  ): Graph {
     const [g, v] = this.copyWithRoot(old);
     const [sg, rt] = subgraph.copyWithRoot(newRoot);
     if (rt === undefined || v === undefined) {
@@ -161,7 +157,6 @@ export class Graph {
     }
     return g.replaceVtx(v, rt, sg);
   }
-
 
   public replaceVerticesWithLabel(
     label: string,

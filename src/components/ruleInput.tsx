@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { createRuleFromString } from "./concepts/GraphStringParser";
-import { Rule } from "./concepts/Rule";
+import { createRuleFromString } from "../concepts/GraphStringParser";
+import { Rule } from "../concepts/Rule";
 
 interface IProps {}
 
