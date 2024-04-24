@@ -36,7 +36,7 @@ export function createRuleFromString(
   }
 
   // Create Adjacency Matrix out of edges
-  let adjacencyMatrix = new Map<GraphNode, Set<GraphNode>>();
+  let adjacencyMatrix = new Map<GraphNode, Array<GraphNode>>();
   for (var i = 0; i < allNodeStrings.length; i += 2) {
     let leftNeighbor = nodeInstances.get(allNodeStrings[i]);
     let rightNeighbor = nodeInstances.get(allNodeStrings[i + 1]);
@@ -47,14 +47,14 @@ export function createRuleFromString(
 
     // Add nodes to adjacency matrix forwards and backwards
     if (adjacencyMatrix.has(leftNeighbor)) {
-      adjacencyMatrix.get(leftNeighbor)!.add(rightNeighbor);
+      adjacencyMatrix.get(leftNeighbor)!.push(rightNeighbor);
     } else {
-      adjacencyMatrix.set(leftNeighbor, new Set([rightNeighbor]));
+      adjacencyMatrix.set(leftNeighbor, [rightNeighbor]);
     }
     if (adjacencyMatrix.has(rightNeighbor)) {
-      adjacencyMatrix.get(rightNeighbor)!.add(leftNeighbor);
+      adjacencyMatrix.get(rightNeighbor)!.push(leftNeighbor);
     } else {
-      adjacencyMatrix.set(rightNeighbor, new Set([leftNeighbor]));
+      adjacencyMatrix.set(rightNeighbor, [leftNeighbor]);
     }
   }
   console.log(adjacencyMatrix);
