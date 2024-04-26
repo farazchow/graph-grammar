@@ -183,7 +183,11 @@ export class Graph {
     const edges: Array<any> = [];
 
     this.adjList.forEach((neighbors: GraphNode[], vtx: GraphNode) => {
-      nodes.push({data: { id: vtx.id, label: vtx.label, img: vtx.image }});
+      if (vtx.image) {
+        nodes.push({data: { id: vtx.id, label: vtx.label, img: vtx.image }});
+      } else {
+        nodes.push({data: { id: vtx.id, label: vtx.label }});
+      }
       for (const n of neighbors) {
         if (!seenNodes.has(n)) {
           edges.push({data: { source: vtx.id, target: n.id }});

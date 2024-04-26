@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import { GraphVisual } from "./components/graphVisualizer";
+import { RuleInput } from "./components/ruleInput";
 
 function App() {
   return (

@@ -11,16 +11,23 @@ const dummy = new Graph(new Map([
 export class GraphVisual extends React.Component {
   render(){
     const elts = dummy.cytoscapeify();
+    console.log(elts);
     const style = [ // the stylesheet for the graph
     {
-      selector: 'node',
+      selector: 'node[img]',
       style: {
         'background-image': 'data(img)',
         'background-color': '#f00',
         'label': 'data(label)'
       }
     },
-
+    {
+        selector: 'node',
+        style: {
+          'background-color': '#f00',
+          'label': 'data(label)'
+        }
+      },
     {
       selector: 'edge',
       style: {
@@ -32,6 +39,6 @@ export class GraphVisual extends React.Component {
     }
   ]
 
-    return <CytoscapeComponent elements={CytoscapeComponent.normalizeElements(elts)} stylesheet={ style } />;
+    return <CytoscapeComponent elements={CytoscapeComponent.normalizeElements(elts)} style={ { width: '600px', height: '600px' }} stylesheet={ style } />;
   }
 }
