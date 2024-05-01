@@ -1,3 +1,4 @@
+import { JSDoc } from "typescript";
 import { GraphNode } from "./GraphNode";
 
 const _ = require("lodash");
@@ -174,5 +175,26 @@ export class Graph {
       newGraph = newGraph.replaceVtx(vtx, rt, sg);
     }
     return newGraph;
+  }
+
+  public cytoscapeify() {
+    const nodes: Array<any> = [];
+    const seenNodes: Set<GraphNode> = new Set();
+    const edges: Array<any> = [];
+
+    this.adjList.forEach((neighbors: GraphNode[], vtx: GraphNode) => {
+      if (vtx.image) {
+        nodes.push({data: { id: vtx.id, label: vtx.label, img: vtx.image }});
+      } else {
+        nodes.push({data: { id: vtx.id, label: vtx.label }});
+      }
+      for (const n of neighbors) {
+        if (!seenNodes.has(n)) {
+          edges.push({data: { source: vtx.id, target: n.id }});
+        }
+      }
+      seenNodes.add(vtx);
+    })
+    return {nodes, edges};
   }
 }
