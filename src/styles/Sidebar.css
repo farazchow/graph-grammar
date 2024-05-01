@@ -1,3 +1,6 @@
 .sidebar {
+  position: sticky;
+  /* display: flex; */
   background-color: cadetblue;
+  width: 25%;
 }

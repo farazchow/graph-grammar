@@ -1,50 +1,32 @@
-import React, { Component } from "react";
-import { createRuleFromString } from "../concepts/GraphStringParser";
-import { Rule } from "../concepts/Rule";
+import React, { useState } from "react";
+// import { createRuleFromString } from "../concepts/GraphStringParser";
+// import { Rule } from "../concepts/Rule";
+import "../styles/RuleInput.css";
 
-interface IProps {}
+export function RuleInput() {
+  const [textArea, changeTextArea] = useState("");
+  const [rules, changeRules] = useState<String[]>([]);
 
-interface IState {
-  textValue: string;
-  rules: string[];
-}
-
-export class RuleInput extends Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      textValue: "",
-      rules: [],
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ textValue: event.target.value });
-  }
-  handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    this.state.rules.push(this.state.textValue);
-    this.setState({ textValue: "" });
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    changeRules([...rules, textArea]);
+    changeTextArea("");
   }
 
-  render() {
-    return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Rule:
-            <input
-              type="text"
-              value={this.state.textValue}
-              onChange={this.handleChange}
-            />
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
-        <p>{this.state.rules}</p>
-      </div>
-    );
+  function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    changeTextArea(e.target.value);
   }
+
+  return (
+    <div className="header">
+      <form className="inputForm" onSubmit={handleSubmit}>
+        <label>
+          <h1>Rule :</h1>
+          <textarea value={textArea} onChange={handleChange} />
+        </label>
+        <button type="submit"> Submit! </button>
+      </form>
+      <p>{rules}</p>
+    </div>
+  );
 }
