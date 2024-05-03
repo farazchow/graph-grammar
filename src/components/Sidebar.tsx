@@ -3,11 +3,12 @@ import "../styles/Sidebar.css";
 import { RuleInput } from "./ruleInput";
 import { ImageInput } from "./nodeImageInput";
 
-export function SideBar() {
+export function SideBar(props: any) {
+
   return (
     <div className="sidebar">
       <RuleInput />
-      <ImageInput nodeTypes={["a", "b"]}/>
+      <ImageInput />
     </div>
   );
 }

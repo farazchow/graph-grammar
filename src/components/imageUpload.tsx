@@ -1,16 +1,12 @@
 import React, { useState } from "react";
 
-const UploadImage = () => {
+const UploadImage = (props: any) => {
 
-  const [selectedImage, setSelectedImage] = useState<File>();
-  const [previewImage, setPreviewImage] = useState<string>("");
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const selectedFiles = event.target.files as FileList;
-    setSelectedImage(selectedFiles?.[0]);
     const url = URL.createObjectURL(selectedFiles?.[0])
-    console.log(url);
-    setPreviewImage(url);
+    props.getUpload({type: props.nodeType, url: url});
   }
 
   return (

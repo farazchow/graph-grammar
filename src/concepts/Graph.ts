@@ -4,6 +4,8 @@ import { GraphNode } from "./GraphNode";
 const _ = require("lodash");
 
 export class Graph {
+  public images: Map<string, string | undefined> = new Map();
+
   constructor(private adjList: Map<GraphNode, Array<GraphNode>>) {}
 
   private cpy(
@@ -177,14 +179,26 @@ export class Graph {
     return newGraph;
   }
 
+  public setImage(nodeLabel: string, url: string | undefined) {
+    this.images.set(nodeLabel, url);
+    console.log(this);
+  }
+
+  public getNodeTypes(): Array<string> {
+    return Array.from(new Set(this.adjList.keys())).map((node: GraphNode) => node.label);
+  }
+
   public cytoscapeify() {
     const nodes: Array<any> = [];
     const seenNodes: Set<GraphNode> = new Set();
     const edges: Array<any> = [];
 
+    console.log(this);
+
     this.adjList.forEach((neighbors: GraphNode[], vtx: GraphNode) => {
-      if (vtx.image) {
-        nodes.push({data: { id: vtx.id, label: vtx.label, img: vtx.image }});
+      const img = this.images.get(vtx.label);
+      if (img) {
+        nodes.push({data: { id: vtx.id, label: vtx.label, img: img }});
       } else {
         nodes.push({data: { id: vtx.id, label: vtx.label }});
       }

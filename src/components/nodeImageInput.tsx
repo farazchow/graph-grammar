@@ -1,25 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { NodeImagesContext, ImageContextType } from '../App';
 // import { createRuleFromString } from "../concepts/GraphStringParser";
 // import { Rule } from "../concepts/Rule";
 import "../styles/RuleInput.css";
 import UploadImage from "./imageUpload";
 
-export function ImageInput(props: any) {
-  const [textArea, changeTextArea] = useState("");
-  const [rules, changeRules] = useState<String[]>([]);
+export interface ImageURL {
+    type: string,
+    url: string
+}
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    changeRules([...rules, textArea]);
-    changeTextArea("");
+export function ImageInput(props: any) {
+  const ctx  = useContext(NodeImagesContext);
+  const nodeTypes = ctx?.graph.getNodeTypes() ?? [];
+
+  const handleUpload = (urlObj: ImageURL) => {
+    console.log(urlObj);
+    ctx?.graph.setImage(urlObj.type, urlObj.url);
+    ctx?.setKey(ctx?.key === 1 ? 0 : 1 );
   }
 
   return (
     <div className="header">
-        {props.nodeTypes.map((type: string) => (
-        <li>
+        {nodeTypes.map((type: string) => (
+        <li key={type}>
             <p>Node: {type} </p>
-            <UploadImage/>
+            <UploadImage nodeType={type} getUpload={handleUpload}/>
         </li>
         ))}
     </div>
