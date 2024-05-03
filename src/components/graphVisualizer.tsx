@@ -43,6 +43,6 @@ export class GraphVisual extends React.Component<CustomInputProps> {
     }
   ]
 
-    return <CytoscapeComponent elements={CytoscapeComponent.normalizeElements(elts)} style={ { width: '1200px', height: '1200px', color:'red' }} stylesheet={ style } />;
+    return <CytoscapeComponent elements={CytoscapeComponent.normalizeElements(elts)} style={ { width: '400px', height: '400px', borderColor: 'black', borderStyle: 'solid', textAlign: 'left' }} stylesheet={ style } />;
   }
 }
