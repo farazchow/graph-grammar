@@ -15,9 +15,10 @@ export function ImageInput(props: any) {
   const nodeTypes = ctx?.graph.getNodeTypes() ?? [];
 
   const handleUpload = (urlObj: ImageURL) => {
-    console.log(urlObj);
+    // console.log(urlObj);
     ctx?.graph.setImage(urlObj.type, urlObj.url);
-    ctx?.setKey(ctx?.key === 1 ? 0 : 1 );
+    ctx?.setKey(ctx?.key === 1 ? 0 : 1);
+    // ctx?.setGraph(ctx?.graph);
   }
 
   return (

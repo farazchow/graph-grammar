@@ -11,7 +11,6 @@ export class GraphVisual extends React.Component<CustomInputProps> {
 
   render(){
     const elts = this.props.graph.cytoscapeify();
-    console.log("hi");
     const style = [ // the stylesheet for the graph
     {
       selector: 'node[img]',

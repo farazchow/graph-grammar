@@ -11,7 +11,8 @@ import { createContext } from "vm";
 export type ImageContextType = {
   graph: Graph;
   key: number;
-  setKey: (key: number) => void;
+  setKey: (k: number) => void;
+  setGraph: (g: Graph) => void;
 };
 
 export const NodeImagesContext = React.createContext<ImageContextType | null>(null);
@@ -25,11 +26,11 @@ function App() {
 
   return (
     <div className="App">
-      <NodeImagesContext.Provider value={{graph: graph, key: key, setKey: setKey}}>
+      <NodeImagesContext.Provider value={{graph, key, setKey, setGraph}}>
         <header className="App-header">
           <SideBar />
         </header>
-        <GraphVisual graph={graph} key={key}/>
+        <GraphVisual graph={graph} key={key} />
       </NodeImagesContext.Provider>
     </div>
   );

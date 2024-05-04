@@ -4,9 +4,11 @@ import { GraphNode } from "./GraphNode";
 const _ = require("lodash");
 
 export class Graph {
-  public images: Map<string, string | undefined> = new Map();
+  public images: Map<string, string | undefined>;
 
-  constructor(private adjList: Map<GraphNode, Array<GraphNode>>) {}
+  constructor(private adjList: Map<GraphNode, Array<GraphNode>>, images: Map<string, string | undefined> = new Map()) {
+    this.images = images;
+  }
 
   private cpy(
     root: GraphNode | undefined = undefined
@@ -45,9 +47,9 @@ export class Graph {
       if (newRoot === undefined) {
         throw new Error("New root should be defined!");
       }
-      return [new Graph(newList), newRoot];
+      return [new Graph(newList, this.images), newRoot];
     } else {
-      return new Graph(newList);
+      return new Graph(newList, this.images);
     }
   }
 
@@ -145,7 +147,7 @@ export class Graph {
       }
     );
 
-    return new Graph(newAdjList);
+    return new Graph(newAdjList, this.images);
   }
 
   public replaceVertex(
@@ -181,7 +183,7 @@ export class Graph {
 
   public setImage(nodeLabel: string, url: string | undefined) {
     this.images.set(nodeLabel, url);
-    console.log(this);
+    // console.log(this);
   }
 
   public getNodeTypes(): Array<string> {
