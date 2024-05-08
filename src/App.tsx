@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import "./App.css";
 import { GraphVisual } from "./components/graphVisualizer";
 import { SideBar } from "./components/Sidebar";
-import { Graph } from './concepts/Graph'
-import { GraphNode } from './concepts/GraphNode';
+import { Graph } from "./concepts/Graph";
+import { GraphNode } from "./concepts/GraphNode";
 
 // @types.todo.ts
 export type ImageContextType = {
@@ -13,18 +13,20 @@ export type ImageContextType = {
   setGraph: (g: Graph) => void;
 };
 
-export const NodeImagesContext = React.createContext<ImageContextType | null>(null);
+export const NodeImagesContext = React.createContext<ImageContextType | null>(
+  null
+);
 
 function App() {
+  const [graph, setGraph] = useState(
+    new Graph(new Map([[new GraphNode("s"), []]]))
+  );
 
-  const [graph, setGraph] = useState(new Graph(new Map([
-    [new GraphNode("s"), []], 
-  ])));
   const [key, setKey] = useState(0);
 
   return (
     <div className="App">
-      <NodeImagesContext.Provider value={{graph, key, setKey, setGraph}}>
+      <NodeImagesContext.Provider value={{ graph, key, setKey, setGraph }}>
         <header className="App-header">
           <SideBar />
           <GraphVisual graph={graph} key={key} />
