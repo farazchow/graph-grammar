@@ -24,12 +24,15 @@ export function RuleComponent(props: any) {
     if (oldGraph !== undefined) {
       const newGraph: Graph = rule.applyAll(oldGraph);
       ctx?.setGraph(newGraph);
-      // ctx?.setKey(ctx?.key === 1 ? 0 : 1);
+      ctx?.setKey(ctx?.key === 1 ? 0 : 1);
     }
   }
 
   return (
     <div className="RuleComponent">
+      <div className="RuleText">
+        {props.RuleInput.oldRoot} &rarr; {props.RuleInput.newRoot}
+      </div>
       <div className="RuleText">{props.RuleInput.graphString}</div>
       <button className="DeleteButton" onClick={handleApply}>
         Apply

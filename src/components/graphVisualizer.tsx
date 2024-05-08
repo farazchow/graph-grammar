@@ -1,11 +1,15 @@
 import { Graph } from "../concepts/Graph";
-
+import cytoscape from "cytoscape";
+// @ts-ignore
+import cola from "cytoscape-cola";
 import React from "react";
 import CytoscapeComponent from "react-cytoscapejs";
 
 interface CustomInputProps {
   graph: Graph;
 }
+
+cytoscape.use(cola);
 
 export class GraphVisual extends React.Component<CustomInputProps> {
   render() {
@@ -54,6 +58,7 @@ export class GraphVisual extends React.Component<CustomInputProps> {
           borderStyle: "solid",
           textAlign: "left",
         }}
+        layout={{ name: "cola" }}
         stylesheet={style}
       />
     );

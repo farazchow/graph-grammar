@@ -28,8 +28,8 @@ export function SideBar(props: any) {
   return (
     <div className="sidebar">
       <RuleInput onSubmit={handleSubmit} />
-      <hr></hr>
-      <NodeInput />
+      {/* <hr></hr> */}
+      {/* <NodeInput /> */}
       <hr></hr>
       <ImageInput />
       <hr></hr>
