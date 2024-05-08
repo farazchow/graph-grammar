@@ -187,7 +187,7 @@ export class Graph {
   }
 
   public getNodeTypes(): Array<string> {
-    return Array.from(new Set(this.adjList.keys())).map((node: GraphNode) => node.label);
+    return Array.from(new Set(Array.from(this.adjList.keys()).map((node: GraphNode): string => {return node.label})));
   }
 
   public cytoscapeify() {
