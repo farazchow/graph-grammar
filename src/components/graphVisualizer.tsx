@@ -1,15 +1,15 @@
 import { Graph } from "../concepts/Graph";
-import { GraphNode } from "../concepts/GraphNode";
 
 import React from "react";
 import CytoscapeComponent from "react-cytoscapejs";
 
-const dummy = new Graph(new Map([[new GraphNode("a"), []]]));
+interface CustomInputProps {
+  graph: Graph;
+}
 
-export class GraphVisual extends React.Component {
+export class GraphVisual extends React.Component<CustomInputProps> {
   render() {
-    const elts = dummy.cytoscapeify();
-    console.log(elts);
+    const elts = this.props.graph.cytoscapeify();
     const style = [
       // the stylesheet for the graph
       {
@@ -18,6 +18,9 @@ export class GraphVisual extends React.Component {
           "background-image": "data(img)",
           "background-color": "#f00",
           label: "data(label)",
+          shape: "rectangle",
+          width: "100px",
+          height: "100px",
         },
       },
       {
@@ -25,6 +28,7 @@ export class GraphVisual extends React.Component {
         style: {
           "background-color": "#f00",
           label: "data(label)",
+          shape: "rectangle",
         },
       },
       {
@@ -41,7 +45,13 @@ export class GraphVisual extends React.Component {
     return (
       <CytoscapeComponent
         elements={CytoscapeComponent.normalizeElements(elts)}
-        style={{ width: "600px", height: "600px" }}
+        style={{
+          width: "400px",
+          height: "400px",
+          borderColor: "black",
+          borderStyle: "solid",
+          textAlign: "left",
+        }}
         stylesheet={style}
       />
     );

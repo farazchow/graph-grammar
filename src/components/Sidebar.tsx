@@ -1,9 +1,10 @@
 import "../styles/Sidebar.css";
 import React, { useEffect, useState } from "react";
 import { RuleInput, RuleInputs } from "./ruleInput";
+import { ImageInput } from "./nodeImageInput";
 import { RuleComponent } from "./RuleComponent";
 
-export function SideBar() {
+export function SideBar(props: any) {
   const [rules, setRules] = useState<RuleInputs[]>([]);
 
   const handleSubmit = React.useCallback(
@@ -30,6 +31,7 @@ export function SideBar() {
   return (
     <div className="sidebar">
       <RuleInput onSubmit={handleSubmit} />
+      <ImageInput />
       <div>
         Rules:
         {rules.map((value: RuleInputs, index: number) => {

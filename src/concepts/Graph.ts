@@ -4,7 +4,11 @@ import { GraphNode } from "./GraphNode";
 const _ = require("lodash");
 
 export class Graph {
-  constructor(private adjList: Map<GraphNode, Array<GraphNode>>) {}
+  public images: Map<string, string | undefined>;
+
+  constructor(private adjList: Map<GraphNode, Array<GraphNode>>, images: Map<string, string | undefined> = new Map()) {
+    this.images = images;
+  }
 
   private cpy(
     root: GraphNode | undefined = undefined
@@ -43,9 +47,9 @@ export class Graph {
       if (newRoot === undefined) {
         throw new Error("New root should be defined!");
       }
-      return [new Graph(newList), newRoot];
+      return [new Graph(newList, this.images), newRoot];
     } else {
-      return new Graph(newList);
+      return new Graph(newList, this.images);
     }
   }
 
@@ -143,7 +147,7 @@ export class Graph {
       }
     );
 
-    return new Graph(newAdjList);
+    return new Graph(newAdjList, this.images);
   }
 
   public replaceVertex(
@@ -177,14 +181,26 @@ export class Graph {
     return newGraph;
   }
 
+  public setImage(nodeLabel: string, url: string | undefined) {
+    this.images.set(nodeLabel, url);
+    // console.log(this);
+  }
+
+  public getNodeTypes(): Array<string> {
+    return Array.from(new Set(this.adjList.keys())).map((node: GraphNode) => node.label);
+  }
+
   public cytoscapeify() {
     const nodes: Array<any> = [];
     const seenNodes: Set<GraphNode> = new Set();
     const edges: Array<any> = [];
 
+    console.log(this);
+
     this.adjList.forEach((neighbors: GraphNode[], vtx: GraphNode) => {
-      if (vtx.image) {
-        nodes.push({data: { id: vtx.id, label: vtx.label, img: vtx.image }});
+      const img = this.images.get(vtx.label);
+      if (img) {
+        nodes.push({data: { id: vtx.id, label: vtx.label, img: img }});
       } else {
         nodes.push({data: { id: vtx.id, label: vtx.label }});
       }

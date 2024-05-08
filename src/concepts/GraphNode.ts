@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
 export class GraphNode {
-  private static types: Map<string, ImageBitmap | undefined> = new Map();
   private _type: string;
   private _id: string;
 
@@ -16,10 +15,6 @@ export class GraphNode {
 
   public get label(): string {
     return this._type;
-  }
-
-  public get image(): ImageBitmap | undefined {
-    return GraphNode.types.get(this._type);
   }
 
   public isEqual(other: GraphNode): boolean {
