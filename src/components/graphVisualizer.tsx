@@ -21,6 +21,8 @@ export class GraphVisual extends React.Component<CustomInputProps> {
         style: {
           "background-image": "data(img)",
           "background-color": "#f00",
+          "background-fit": "contain",
+          "background-opacity": "0",
           label: "data(label)",
           shape: "rectangle",
           width: "75px",
