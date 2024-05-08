@@ -1,9 +1,32 @@
 .header {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .inputForm {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.RuleComponent {
   /* display: flex; */
-  /* flex-direction: column; */
+  /* flex-direction: row; */
+  /* justify-content: space-between; */
+  /* align-items: center; */
+  border: solid red;
+  /* margin: auto; */
+}
+
+.textArea {
+  min-width: 90%;
+  min-height: 50px;
+}
+
+.RuleText {
+  /* word-break: break-all; */
+  /* overflow-wrap: break-word; */
 }
