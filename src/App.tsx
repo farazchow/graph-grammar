@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
 import { GraphVisual } from "./components/graphVisualizer";
-import { RuleInput } from "./components/ruleInput";
 import { SideBar } from "./components/Sidebar";
 import { Graph } from './concepts/Graph'
 import { GraphNode } from './concepts/GraphNode';
