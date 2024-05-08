@@ -10,7 +10,7 @@ const UploadImage = (props: any) => {
   }
 
   return (
-    <div>
+    <div style={{width: '175px'}}>
       <input
         type="file"
         name="myImage"

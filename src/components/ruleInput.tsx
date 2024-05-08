@@ -30,10 +30,6 @@ export function RuleInput(props: any) {
     setGraphString("");
   }
 
-  // function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-  //   changeTextArea(e.target.value);
-  // }
-
   function handleOldRootChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setOldRoot(e.target.value);
   }
@@ -45,21 +41,21 @@ export function RuleInput(props: any) {
   }
 
   return (
-    <div className="header">
+    <div className="ruleInputHeader">
       <form className="inputForm" onSubmit={handleSubmit}>
         <h3>Add Rule :</h3>
         <label>
-          Old Root:
-          <textarea value={oldRoot} onChange={handleOldRootChange} />
+          Old Root: 
+          <textarea className="smallerTextArea" value={oldRoot} onChange={handleOldRootChange} />
         </label>
         <label>
-          New root:
-          <textarea value={newRoot} onChange={handleNewRootChange} />
+          New root: 
+          <textarea className="smallerTextArea" value={newRoot} onChange={handleNewRootChange} />
         </label>
         <label>
           Graph String:
           <textarea
-            className="textArea"
+            className="ruleTextArea"
             value={graphString}
             onChange={handleGraphStringChange}
           />

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { RuleInput, RuleInputs } from "./ruleInput";
 import { ImageInput } from "./nodeImageInput";
 import { RuleComponent } from "./RuleComponent";
+import { NodeInput } from "./NodeInput";
 
 export function SideBar(props: any) {
   const [rules, setRules] = useState<RuleInputs[]>([]);
@@ -24,16 +25,16 @@ export function SideBar(props: any) {
     [rules]
   );
 
-  useEffect(() => {
-    console.log(rules);
-  });
-
   return (
     <div className="sidebar">
       <RuleInput onSubmit={handleSubmit} />
+      <hr></hr>
+      <NodeInput />
+      <hr></hr>
       <ImageInput />
-      <div>
-        Rules:
+      <hr></hr>
+      <div className="RuleContainer">
+        <h3>Rules:</h3>
         {rules.map((value: RuleInputs, index: number) => {
           return (
             <RuleComponent

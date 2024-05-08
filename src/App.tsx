@@ -4,7 +4,6 @@ import { GraphVisual } from "./components/graphVisualizer";
 import { SideBar } from "./components/Sidebar";
 import { Graph } from './concepts/Graph'
 import { GraphNode } from './concepts/GraphNode';
-import { createContext } from "vm";
 
 // @types.todo.ts
 export type ImageContextType = {
@@ -19,7 +18,7 @@ export const NodeImagesContext = React.createContext<ImageContextType | null>(nu
 function App() {
 
   const [graph, setGraph] = useState(new Graph(new Map([
-    [new GraphNode("s"), []]
+    [new GraphNode("s"), []], 
   ])));
   const [key, setKey] = useState(0);
 
@@ -28,8 +27,8 @@ function App() {
       <NodeImagesContext.Provider value={{graph, key, setKey, setGraph}}>
         <header className="App-header">
           <SideBar />
+          <GraphVisual graph={graph} key={key} />
         </header>
-        <GraphVisual graph={graph} key={key} />
       </NodeImagesContext.Provider>
     </div>
   );

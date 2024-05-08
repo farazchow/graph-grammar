@@ -1,7 +1,5 @@
 import React, { useState, useContext } from "react";
 import { NodeImagesContext, ImageContextType } from '../App';
-// import { createRuleFromString } from "../concepts/GraphStringParser";
-// import { Rule } from "../concepts/Rule";
 import "../styles/RuleInput.css";
 import UploadImage from "./imageUpload";
 
@@ -22,13 +20,24 @@ export function ImageInput(props: any) {
   }
 
   return (
-    <div className="header">
-        {nodeTypes.map((type: string) => (
-        <li key={type}>
-            <p>Node: {type} </p>
-            <UploadImage nodeType={type} getUpload={handleUpload}/>
-        </li>
-        ))}
+    <div className="nodeHeader">
+        {nodeTypes.map((type: string) => {
+          return(
+            <div className="nodeBox">
+                <h3> {type} </h3>
+                {/* <h1> {type} </h1> */}
+                <form>
+                  <label>
+                    Terminal?
+                  </label>
+                  <input type="checkbox">
+                  </input>
+                </form>
+                  <UploadImage nodeType={type} getUpload={handleUpload}/>
+            </div>
+            )
+        }
+        )}
     </div>
   );
 }

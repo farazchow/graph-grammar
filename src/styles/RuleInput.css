@@ -1,7 +1,7 @@
-.header {
+.ruleInputHeader {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .inputForm {
@@ -10,23 +10,71 @@
   flex-wrap: wrap;
   margin-left: 10px;
   margin-right: 10px;
+  text-align: center;
 }
 
 .RuleComponent {
-  /* display: flex; */
-  /* flex-direction: row; */
-  /* justify-content: space-between; */
-  /* align-items: center; */
-  border: solid red;
-  /* margin: auto; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* border: solid red; */
+  border-bottom: dotted purple;
+  width: 22vw;
+  margin-top: 10px;
 }
 
-.textArea {
-  min-width: 90%;
+.ruleTextArea {
+  width: 90%;
   min-height: 50px;
+  max-height: 70vh;
+  resize: vertical;
+}
+
+.smallerTextArea {
+  width: 60%;
+  height: 30px;
+  resize: none;
+  margin-left: 15px;
 }
 
 .RuleText {
   /* word-break: break-all; */
-  /* overflow-wrap: break-word; */
+  overflow-wrap: break-word;
+  max-width: 20vw;
+}
+
+.nodeBox {
+  border: solid green;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: inherit;
+  padding: 10px;
+}
+
+.nodeHeader {
+  display: flex;
+  flex-direction: column;
+  /* margin-top: 20px;
+  margin-left: 5%;
+  margin-right: 5%; */
+  /* margin: 5%; */
+  padding: 10px;
+}
+
+.nodeInputForm {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 100px;
+  text-align: center;
+}
+
+.nodeInputInner {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 }
