@@ -19,8 +19,8 @@ export class GraphVisual extends React.Component<CustomInputProps> {
           "background-color": "#f00",
           label: "data(label)",
           shape: "rectangle",
-          width: "100px",
-          height: "100px",
+          width: "75px",
+          height: "75px",
         },
       },
       {
@@ -29,6 +29,8 @@ export class GraphVisual extends React.Component<CustomInputProps> {
           "background-color": "#f00",
           label: "data(label)",
           shape: "rectangle",
+          width: "75px",
+          height: "75px",
         },
       },
       {
@@ -46,8 +48,8 @@ export class GraphVisual extends React.Component<CustomInputProps> {
       <CytoscapeComponent
         elements={CytoscapeComponent.normalizeElements(elts)}
         style={{
-          width: "400px",
-          height: "400px",
+          width: "700px",
+          height: "500px",
           borderColor: "black",
           borderStyle: "solid",
           textAlign: "left",
