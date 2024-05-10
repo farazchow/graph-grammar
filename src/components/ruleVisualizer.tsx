@@ -11,7 +11,7 @@ interface CustomInputProps {
 
 cytoscape.use(cola);
 
-export class GraphVisual extends React.Component<CustomInputProps> {
+export class RuleVisual extends React.Component<CustomInputProps> {
   render() {
     const elts = this.props.graph.cytoscapeify();
     
@@ -24,6 +24,7 @@ export class GraphVisual extends React.Component<CustomInputProps> {
           "background-color": "#f00",
           "background-fit": "contain",
           "background-opacity": "0",
+          "font-size": "50px",
           label: "data(label)",
           shape: "rectangle",
           width: "75px",
@@ -34,6 +35,7 @@ export class GraphVisual extends React.Component<CustomInputProps> {
         selector: "node",
         style: {
           "background-color": "#f00",
+          "font-size": "50px",
           label: "data(label)",
           shape: "rectangle",
           width: "75px",
@@ -55,14 +57,17 @@ export class GraphVisual extends React.Component<CustomInputProps> {
       <CytoscapeComponent
         elements={CytoscapeComponent.normalizeElements(elts)}
         style={{
-          width: "700px",
-          height: "500px",
-          borderColor: "black",
-          borderStyle: "solid",
+          width: "100px",
+          height: "100px",
           textAlign: "left",
         }}
-        layout={{ name: "cola" }}
+        layout={{ name: "breadthfirst" }}
         stylesheet={style}
+        cy={(cy) => { cy.fit() }}
+        userPanningEnabled={false}
+        userZoomingEnabled={false}
+        autoungrabify={true}
+        autounselectify={true}
       />
     );
   }
