@@ -21,6 +21,9 @@ export function RuleComponent(props: any) {
   );
   ruleGraphRight.images = ctx?.graph.images ?? new Map();
 
+  const graphLeft = new Graph(new Map([[new GraphNode(ruleData.oldRoot), []]]));
+  graphLeft.images = ctx?.graph.images ?? new Map();
+
   function handleDelete() {
     props.handleDelete(props.id);
   }
@@ -43,8 +46,9 @@ export function RuleComponent(props: any) {
 
   return (
     <div className="RuleComponent">
+      <RuleVisual graph={graphLeft} />
       <div className="RuleText">
-        {props.RuleInput.oldRoot} &rarr; {props.RuleInput.newRoot}
+      &rarr;
       </div>
       <RuleVisual graph={ruleGraphRight} key={ctx?.key}/>
       {/* <div className="RuleText">{props.RuleInput.graphString}</div> */}
