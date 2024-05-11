@@ -3,10 +3,23 @@ import { NodeImagesContext, ImageContextType } from "../App";
 import { createRuleFromString } from "../concepts/GraphStringParser";
 import React from "react";
 import { Graph } from "../concepts/Graph";
+import { GraphNode } from "../concepts/GraphNode";
 import { Rule } from "../concepts/Rule";
+import { RuleVisual } from "./ruleVisualizer";
 
 export function RuleComponent(props: any) {
   const ctx = React.useContext(NodeImagesContext);
+
+  const ruleData = props.RuleInput;
+  const rule: Rule = createRuleFromString(
+    ruleData.oldRoot,
+    ruleData.newRoot,
+    ruleData.graphString
+  );
+  const ruleGraphRight: Graph = rule.applyAll(
+    new Graph(new Map([[new GraphNode(ruleData.oldRoot), []]]))
+  );
+  ruleGraphRight.images = ctx?.graph.images ?? new Map();
 
   function handleDelete() {
     props.handleDelete(props.id);
@@ -33,7 +46,8 @@ export function RuleComponent(props: any) {
       <div className="RuleText">
         {props.RuleInput.oldRoot} &rarr; {props.RuleInput.newRoot}
       </div>
-      <div className="RuleText">{props.RuleInput.graphString}</div>
+      <RuleVisual graph={ruleGraphRight} key={ctx?.key}/>
+      {/* <div className="RuleText">{props.RuleInput.graphString}</div> */}
       <button className="DeleteButton" onClick={handleApply}>
         Apply
       </button>
