@@ -15,7 +15,7 @@ cytoscape.use(cola);
 export class GraphVisual extends React.Component<CustomInputProps> {
   render() {
     const elts = this.props.graph.cytoscapeify();
-    const width = window.innerWidth * 0.7;
+    const width = window.innerWidth * 0.65;
     const height = window.innerHeight * 0.95;
 
     const style = [

@@ -46,7 +46,7 @@ export function SideBar(props: any) {
   }, [cy]);
 
   if (cy !== undefined) {
-    cy.on("tap", "node", function (event) {
+    cy.on("dbltap", "node", function (event) {
       if (toggledRule !== undefined) {
         const targetNode = event.target;
         const oldGraph = ctx?.graph;
@@ -92,11 +92,13 @@ export function SideBar(props: any) {
             />
           );
         })}
-        <h3>Toggled Rule</h3>
-        {toggledRule && (
-          <ToggledRule Rule={toggledRule} handleDelete={handleUntoggle} />
-        )}
       </div>
+      <h3>Toggled Rule:</h3>
+      {toggledRule && (
+        <ToggledRule Rule={toggledRule} handleDelete={handleUntoggle} />
+      )}
+      <hr></hr>
+      <button onClick={props.handleUndo}>Undo</button>
     </div>
   );
 }

@@ -26,14 +26,38 @@ function App() {
   );
   const [cy, setCy] = useState<cytoscape.Core>();
   const [key, setKey] = useState(0);
+  const [graphHistory, setGraphHistory] = useState<Graph[]>([]);
+
+  const handleGraphUpdate = (g: Graph) => {
+    const oldGraph = graph;
+    setGraph(g);
+    setGraphHistory([...graphHistory, oldGraph]);
+  };
+
+  const undo = () => {
+    const graphHistoryCopy = [...graphHistory];
+    const newGraph = graphHistoryCopy.pop();
+    if (newGraph !== undefined) {
+      setGraph(newGraph);
+      setGraphHistory(graphHistoryCopy);
+      setKey(key === 1 ? 0 : 1);
+    }
+  };
 
   return (
     <div className="App">
       <NodeImagesContext.Provider
-        value={{ graph, key, cy, setKey, setGraph, setCy }}
+        value={{
+          graph,
+          key,
+          cy,
+          setKey,
+          setGraph: handleGraphUpdate,
+          setCy,
+        }}
       >
         <header className="App-header">
-          <SideBar />
+          <SideBar handleUndo={undo} />
           <GraphVisual graph={graph} key={key} setCy={setCy} />
         </header>
       </NodeImagesContext.Provider>
