@@ -7,6 +7,7 @@ import CytoscapeComponent from "react-cytoscapejs";
 
 interface CustomInputProps {
   graph: Graph;
+  setCy: (cy: cytoscape.Core) => void;
 }
 
 cytoscape.use(cola);
@@ -65,6 +66,7 @@ export class GraphVisual extends React.Component<CustomInputProps> {
         // layout={{ name: "grid", rows: 8, cols: 11}}
         // layout= {{name: "random"}}
         stylesheet={style}
+        cy = {(cy) => {this.props.setCy(cy)}}
       />
     );
   }

@@ -25,6 +25,17 @@ export function RuleComponent(props: any) {
     props.handleDelete(props.id);
   }
 
+  function handleApplyOne() {
+    const ruleData = props.RuleInput;
+    const rule: Rule = createRuleFromString(
+      ruleData.oldRoot,
+      ruleData.newRoot,
+      ruleData.graphString
+    );
+
+    props.handleApplyOne(rule);
+  }
+
   function handleApply() {
     const ruleData = props.RuleInput;
     const rule: Rule = createRuleFromString(
@@ -49,7 +60,10 @@ export function RuleComponent(props: any) {
       <RuleVisual graph={ruleGraphRight} key={ctx?.key}/>
       {/* <div className="RuleText">{props.RuleInput.graphString}</div> */}
       <button className="DeleteButton" onClick={handleApply}>
-        Apply
+        Apply All
+      </button>
+      <button className="DeleteButton" onClick={handleApplyOne}>
+        Apply One
       </button>
       <button className="DeleteButton" onClick={handleDelete}>
         X

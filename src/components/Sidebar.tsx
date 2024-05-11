@@ -4,9 +4,12 @@ import { RuleInput, RuleInputs } from "./ruleInput";
 import { ImageInput } from "./nodeImageInput";
 import { RuleComponent } from "./RuleComponent";
 import { NodeInput } from "./NodeInput";
+import { Rule } from "../concepts/Rule";
+import { NodeImagesContext } from "../App";
 
 export function SideBar(props: any) {
   const [rules, setRules] = useState<RuleInputs[]>([]);
+  const [toggledRule, setToggledRule] = useState<Rule>();
 
   const handleSubmit = React.useCallback(
     (newRule: RuleInputs) => {
@@ -25,6 +28,28 @@ export function SideBar(props: any) {
     [rules]
   );
 
+  const handleApplyOne = React.useCallback(
+    (rule: Rule) => {
+      setToggledRule(rule);
+    }, 
+    [toggledRule]
+  )
+
+  const ctx = React.useContext(NodeImagesContext);
+  const cy = ctx?.cy;
+  if (cy !== undefined) {
+    cy.on('tap', 'node', function(event) {
+      if (toggledRule !== undefined) {
+        const targetNode = event.target;
+        console.log("CY EVENT")
+        console.log(targetNode._private.data);
+        console.log(ctx?.graph)
+        // const newGraph = toggledRule.applyOne()
+      }
+    })
+  }
+  
+
   return (
     <div className="sidebar">
       <RuleInput onSubmit={handleSubmit} />
@@ -42,9 +67,11 @@ export function SideBar(props: any) {
               RuleInput={value}
               id={index}
               handleDelete={handleDelete}
+              handleApplyOne={handleApplyOne}
             />
           );
         })}
+        {toggledRule?.left}
       </div>
     </div>
   );
