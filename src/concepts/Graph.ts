@@ -1,4 +1,3 @@
-import { JSDoc } from "typescript";
 import { GraphNode } from "./GraphNode";
 
 const _ = require("lodash");
@@ -6,7 +5,10 @@ const _ = require("lodash");
 export class Graph {
   public images: Map<string, string | undefined>;
 
-  constructor(private adjList: Map<GraphNode, Array<GraphNode>>, images: Map<string, string | undefined> = new Map()) {
+  constructor(
+    private adjList: Map<GraphNode, Array<GraphNode>>,
+    images: Map<string, string | undefined> = new Map()
+  ) {
     this.images = images;
   }
 
@@ -187,7 +189,13 @@ export class Graph {
   }
 
   public getNodeTypes(): Array<string> {
-    return Array.from(new Set(Array.from(this.adjList.keys()).map((node: GraphNode): string => {return node.label})));
+    return Array.from(
+      new Set(
+        Array.from(this.adjList.keys()).map((node: GraphNode): string => {
+          return node.label;
+        })
+      )
+    );
   }
 
   public cytoscapeify() {
@@ -195,22 +203,31 @@ export class Graph {
     const seenNodes: Set<GraphNode> = new Set();
     const edges: Array<any> = [];
 
-    console.log(this);
+    // console.log(this);
 
     this.adjList.forEach((neighbors: GraphNode[], vtx: GraphNode) => {
       const img = this.images.get(vtx.label);
       if (img) {
-        nodes.push({data: { id: vtx.id, label: vtx.label, img: img }});
+        nodes.push({ data: { id: vtx.id, label: vtx.label, img: img } });
       } else {
-        nodes.push({data: { id: vtx.id, label: vtx.label }});
+        nodes.push({ data: { id: vtx.id, label: vtx.label } });
       }
       for (const n of neighbors) {
         if (!seenNodes.has(n)) {
-          edges.push({data: { source: vtx.id, target: n.id }});
+          edges.push({ data: { source: vtx.id, target: n.id } });
         }
       }
       seenNodes.add(vtx);
-    })
-    return {nodes, edges};
+    });
+    return { nodes, edges };
+  }
+
+  public findNodeById(id: string): GraphNode {
+    for (const key of this.adjList.keys()) {
+      if (key.id === id) {
+        return key;
+      }
+    }
+    throw new Error("Node could not be found by ID");
   }
 }

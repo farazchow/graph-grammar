@@ -6,10 +6,13 @@ import { RuleComponent } from "./RuleComponent";
 import { NodeInput } from "./NodeInput";
 import { Rule } from "../concepts/Rule";
 import { NodeImagesContext } from "../App";
+import { ToggledRule } from "./ToggledRule";
 
 export function SideBar(props: any) {
   const [rules, setRules] = useState<RuleInputs[]>([]);
   const [toggledRule, setToggledRule] = useState<Rule>();
+  const ctx = React.useContext(NodeImagesContext);
+  const cy = ctx?.cy;
 
   const handleSubmit = React.useCallback(
     (newRule: RuleInputs) => {
@@ -30,25 +33,43 @@ export function SideBar(props: any) {
 
   const handleApplyOne = React.useCallback(
     (rule: Rule) => {
+      cy?.removeAllListeners();
       setToggledRule(rule);
-    }, 
-    [toggledRule]
-  )
+      // ctx?.setKey(ctx?.key === 1 ? 0 : 1);
+    },
+    [cy]
+  );
+  const handleUntoggle = React.useCallback(() => {
+    cy?.removeAllListeners();
+    setToggledRule(undefined);
+    // ctx?.setKey(ctx?.key === 1 ? 0 : 1);
+  }, [cy]);
 
-  const ctx = React.useContext(NodeImagesContext);
-  const cy = ctx?.cy;
   if (cy !== undefined) {
-    cy.on('tap', 'node', function(event) {
+    cy.on("tap", "node", function (event) {
       if (toggledRule !== undefined) {
         const targetNode = event.target;
-        console.log("CY EVENT")
-        console.log(targetNode._private.data);
-        console.log(ctx?.graph)
-        // const newGraph = toggledRule.applyOne()
+        const oldGraph = ctx?.graph;
+        const nodeToReplaceData = targetNode._private.data;
+        if (nodeToReplaceData.label === toggledRule.left) {
+          const nodeToReplace = ctx?.graph.findNodeById(nodeToReplaceData.id);
+
+          if (nodeToReplace === undefined) {
+            throw new Error("Couldn't find node");
+          }
+          if (oldGraph === undefined) {
+            throw new Error("Trying to apply rules to no graph");
+          }
+
+          const newGraph = toggledRule.applyOne(nodeToReplace, oldGraph);
+          ctx?.setGraph(newGraph);
+          ctx?.setKey(ctx?.key === 1 ? 0 : 1);
+        } else {
+          console.log("Can't apply rule to this node");
+        }
       }
-    })
+    });
   }
-  
 
   return (
     <div className="sidebar">
@@ -71,7 +92,10 @@ export function SideBar(props: any) {
             />
           );
         })}
-        {toggledRule?.left}
+        <h3>Toggled Rule</h3>
+        {toggledRule && (
+          <ToggledRule Rule={toggledRule} handleDelete={handleUntoggle} />
+        )}
       </div>
     </div>
   );

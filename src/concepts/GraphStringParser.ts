@@ -57,8 +57,6 @@ export function createRuleFromString(
       adjacencyMatrix.set(rightNeighbor, [leftNeighbor]);
     }
   }
-  console.log(adjacencyMatrix);
-
   const graph = new Graph(adjacencyMatrix);
   const rule = new Rule(oldRoot, rightNode, graph);
   return rule;

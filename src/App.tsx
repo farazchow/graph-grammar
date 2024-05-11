@@ -29,10 +29,12 @@ function App() {
 
   return (
     <div className="App">
-      <NodeImagesContext.Provider value={{ graph, key, cy, setKey, setGraph, setCy}}>
+      <NodeImagesContext.Provider
+        value={{ graph, key, cy, setKey, setGraph, setCy }}
+      >
         <header className="App-header">
           <SideBar />
-          <GraphVisual graph={graph} key={key} setCy={setCy}/>
+          <GraphVisual graph={graph} key={key} setCy={setCy} />
         </header>
       </NodeImagesContext.Provider>
     </div>
