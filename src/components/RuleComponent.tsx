@@ -16,9 +16,7 @@ export function RuleComponent(props: any) {
     ruleData.newRoot,
     ruleData.graphString
   );
-  const ruleGraphRight: Graph = rule.applyAll(
-    new Graph(new Map([[new GraphNode(ruleData.oldRoot), []]]))
-  );
+  const ruleGraphRight: Graph = rule.right;
   ruleGraphRight.images = ctx?.graph.images ?? new Map();
 
   const graphLeft = new Graph(new Map([[new GraphNode(ruleData.oldRoot), []]]));
