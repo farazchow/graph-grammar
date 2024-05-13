@@ -1,7 +1,5 @@
 import { Graph } from "../concepts/Graph";
 import cytoscape from "cytoscape";
-// @ts-ignore
-import cola from "cytoscape-cola";
 import React from "react";
 import CytoscapeComponent from "react-cytoscapejs";
 
@@ -9,13 +7,14 @@ interface CustomInputProps {
   graph: Graph;
 }
 
-cytoscape.use(cola);
-
 export class RuleVisual extends React.Component<CustomInputProps> {
+  setCy = (cy: cytoscape.Core) => {
+    cy.layout({ name: "breadthfirst" }).run();
+    cy.fit();
+  };
+
   render() {
     const elts = this.props.graph.cytoscapeify();
-
-    const layout = { name: "breadthfirst" };
     
     const style = [
       // the stylesheet for the graph
@@ -63,9 +62,8 @@ export class RuleVisual extends React.Component<CustomInputProps> {
           height: "100px",
           textAlign: "left",
         }}
-        layout={layout}
         stylesheet={style}
-        cy={(cy) => { cy.layout(layout); cy.fit() }}
+        cy={this.setCy}
         userPanningEnabled={false}
         userZoomingEnabled={false}
         autoungrabify={true}

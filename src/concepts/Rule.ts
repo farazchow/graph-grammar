@@ -10,7 +10,7 @@ export class Rule {
 
   public applyOne(node: GraphNode, graph: Graph): Graph {
     if (node.label !== this.left) {
-      throw new Error("Node to replace is not of correct type!")
+      throw new Error("Node to replace is not of correct type!");
     }
     const newGraph = graph.replaceVertex(node, this.root, this.right);
     return newGraph;
@@ -23,5 +23,9 @@ export class Rule {
       this.right
     );
     return newGraph;
+  }
+
+  public getRootLabel(): string {
+    return this.root.label;
   }
 }
